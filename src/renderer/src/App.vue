@@ -1,11 +1,11 @@
 <script setup>
-import Versions from './components/Versions.vue'
+import Home from './components/Home.vue'
 </script>
 
 <template>
-  <Versions></Versions>
-
-  你好
+  <div class="main-continer">
+    <Home></Home>
+  </div>
 </template>
 
 <style lang="less">

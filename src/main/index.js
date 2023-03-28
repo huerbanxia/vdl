@@ -6,12 +6,14 @@ import icon from '../../resources/icon.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 670,
+    width: 1280,
+    height: 720,
     show: false,
     autoHideMenuBar: true,
-    // 创建透明窗口 ? 暂时不知道效果
-    // transparent: true,
+    // 创建透明窗口、背景色透明、无边框 以便设置圆角效果
+    transparent: true,
+    backgroundColor: '#00000000',
+    frame: false,
     // 隐藏标题栏
     titleBarStyle: 'hidden',
     // 显示标题栏按钮 且支持通过jsApi在渲染进程中进行修改 详见以下链接

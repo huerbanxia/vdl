@@ -2,6 +2,11 @@
 
 一个视频下载器
 
+## TODO
+
+-   [ ] 设置窗口圆角
+-   [ ] 添加标题栏并设置可拖动
+
 ## 推荐的 IDE 设置
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
