@@ -2,18 +2,34 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import WinStateDefault from 'electron-win-state'
 
+// 不知道为啥需要加个 default
+const WinState = WinStateDefault.default
+
+// 状态保存仓库
+const winState = new WinState({
+  defaultWidth: 1280,
+  defaultHeight: 720,
+  // 开发环境每次修改立刻存储，而不是在关闭窗口时保存
+  dev: is.dev
+  // other winState options, see below
+})
 function createWindow() {
+  console.log(winState.winOptions)
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 720,
+    // 实际上就是解构出 { width: 1280, height: 720, x: 640, y: 345 }
+    ...winState.winOptions,
+    // 最小高宽设置
+    minWidth: 800,
+    minHeight: 600,
     show: false,
     autoHideMenuBar: true,
     // 创建透明窗口、背景色透明、无边框 以便设置圆角效果
-    transparent: true,
-    backgroundColor: '#00000000',
-    frame: false,
+    // transparent: true,
+    // backgroundColor: '#00000000',
+    // frame: false,
     // 隐藏标题栏
     titleBarStyle: 'hidden',
     // 显示标题栏按钮 且支持通过jsApi在渲染进程中进行修改 详见以下链接
@@ -22,7 +38,7 @@ function createWindow() {
     titleBarOverlay: {
       color: '#2f3241',
       symbolColor: '#74b1be',
-      height: 40
+      height: 39
     },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -47,6 +63,10 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // 状态管理绑定
+  winState.manage(mainWindow)
+  mainWindow.resetWindowToDefault()
 }
 
 // This method will be called when Electron has finished
