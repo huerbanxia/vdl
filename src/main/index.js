@@ -16,7 +16,6 @@ const winState = new WinState({
   // other winState options, see below
 })
 function createWindow() {
-  console.log(winState.winOptions)
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     // 实际上就是解构出 { width: 1280, height: 720, x: 640, y: 345 }
