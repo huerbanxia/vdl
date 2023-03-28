@@ -6,6 +6,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+// externalizeDepsPlugin 自动将 main、preload 中的依赖外部化
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()]
