@@ -6,10 +6,10 @@
 
 -   [x] ~~设置窗口圆角 效果不好已放弃~~
 -   [x] 添加标题栏并设置可拖动
--   [ ] 添加响应式样式
+-   [x] 添加响应式样式
 -   [ ] 添加路由
 -   [ ] 左侧添加菜单栏
--   [ ] 最大化按钮失效
+-   [x] 最大化按钮失效
 
 ## 推荐的 IDE 设置
 
@@ -17,9 +17,9 @@
 
 ## 项目安装
 
-### 安装
+`尽量使用npm命令 ，使用pnpm在打包时会出现找不到依赖的问题`
 
-推荐使用 pnpm
+### 安装
 
 ```bash
 $ npm install
@@ -46,16 +46,6 @@ $ npm run build:mac
 
 # For Linux
 $ npm run build:linux
-
-# 使用 pnpm
-# For windows
-$ pnpm run build:win
-
-# For macOS
-$ pnpm run build:mac
-
-# For Linux
-$ pnpm run build:linux
 ```
 
 

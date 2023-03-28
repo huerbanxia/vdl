@@ -2,23 +2,24 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import WinStateDefault from 'electron-win-state'
-
-// 不知道为啥需要加个 default
-const WinState = WinStateDefault.default
+import WinState from 'electron-win-state'
 
 // 状态保存仓库
-const winState = new WinState({
+const winState = new WinState.default({
   defaultWidth: 1280,
   defaultHeight: 720,
+  // electronStoreOptions: {
+  //   name: 'window-state'
+  // }
   // 开发环境每次修改立刻存储，而不是在关闭窗口时保存
   dev: is.dev
-  // other winState options, see below
 })
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     // 实际上就是解构出 { width: 1280, height: 720, x: 640, y: 345 }
+    width: 1280,
+    height: 720,
     ...winState.winOptions,
     // 最小高宽设置
     minWidth: 800,
@@ -65,7 +66,7 @@ function createWindow() {
 
   // 状态管理绑定
   winState.manage(mainWindow)
-  mainWindow.resetWindowToDefault()
+  // mainWindow.resetWindowToDefault()
 }
 
 // This method will be called when Electron has finished
