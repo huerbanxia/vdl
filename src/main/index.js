@@ -6,10 +6,22 @@ import icon from '../../resources/icon.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1000,
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    // 创建透明窗口 ? 暂时不知道效果
+    // transparent: true,
+    // 隐藏标题栏
+    titleBarStyle: 'hidden',
+    // 显示标题栏按钮 且支持通过jsApi在渲染进程中进行修改 详见以下链接
+    // https://github.com/WICG/window-controls-overlay/blob/main/explainer.md#javascript-apis
+    // https://github.com/WICG/window-controls-overlay/blob/main/explainer.md#css-environment-variables
+    titleBarOverlay: {
+      color: '#2f3241',
+      symbolColor: '#74b1be',
+      height: 40
+    },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
