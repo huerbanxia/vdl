@@ -22,8 +22,7 @@
     "@electron-toolkit/utils": "^1.0.2",
     "electron-updater": "^5.3.0",
     "electron-win-state": "^1.1.22",
-    "element-plus": "^2.3.1",
-    "normalize.css": "^8.0.1"
+    "element-plus": "^2.3.1"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
