@@ -1,12 +1,67 @@
 <!--
- * new page
+ * 左侧菜单栏组件
  * @author: zgy
  * @since: 2023-03-29
  * AsideMenu.vue
 -->
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { Document, Menu as IconMenu, Location, Expand, Fold } from '@element-plus/icons-vue'
+
+const isCollapse = ref(true)
+
+const emit = defineEmits(['change-collapse'])
+
+const changeCollapse = () => {
+  isCollapse.value = !isCollapse.value
+  emit('change-collapse', isCollapse.value)
+}
+onMounted(() => {
+  isCollapse.value = false
+})
+</script>
 <template>
-  <div class="container"></div>
+  <div class="container">
+    <el-menu
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      default-active="1"
+      :collapse="isCollapse"
+    >
+      <el-menu-item class="el-menu-item" @click="changeCollapse">
+        <el-icon v-if="isCollapse"><Expand /></el-icon>
+        <el-icon v-if="!isCollapse"><Fold /></el-icon>
+      </el-menu-item>
+      <el-menu-item index="1">
+        <el-icon><Document /></el-icon>
+        <template #title>网址解析</template>
+      </el-menu-item>
+      <el-menu-item index="2">
+        <el-icon><icon-menu /></el-icon>
+        <template #title>网址解析</template>
+      </el-menu-item>
+      <el-menu-item index="3">
+        <el-icon><Location /></el-icon>
+        <template #title>网址解析</template>
+      </el-menu-item>
+      <el-menu-item index="3">
+        <el-icon><Location /></el-icon>
+        <template #title>重置窗口</template>
+      </el-menu-item>
+    </el-menu>
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="less" scoped>
+.el-menu {
+  height: 100vh;
+  border: 0;
+}
+.change-menu {
+  bottom: 0;
+}
+el-menu--collapse {
+  width: 100%;
+}
+</style>

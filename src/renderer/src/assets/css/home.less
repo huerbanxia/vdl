@@ -1,4 +1,51 @@
-.header {
-  height: 39px;
+.el-container {
+  height: 100%;
+}
+
+.el-header {
+  background-color: #2f3241;
+  color: #fff;
+  text-align: center;
+  line-height: 60px;
   padding: 0;
+  height: 40px;
+}
+
+.el-aside {
+  background-color: #545c64;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+  overflow: hidden;
+}
+
+.el-main {
+  background-color: #000;
+  padding: 0;
+}
+
+.aside-expand {
+  width: 15%;
+  animation: changeStyleExpand 0.5s;
+}
+@keyframes changeStyleExpand {
+  0% {
+    width: 5%;
+  }
+  100% {
+    width: 15%;
+  }
+}
+
+.aside-fold {
+  width: 5%;
+  animation: changeStyleFold 0.5s;
+}
+@keyframes changeStyleFold {
+  0% {
+    width: 15%;
+  }
+  100% {
+    width: 5%;
+  }
 }

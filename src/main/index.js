@@ -19,12 +19,10 @@ function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     // 实际上就是解构出 { width: 1280, height: 720, x: 640, y: 345 }
-    width: 1280,
-    height: 720,
     ...winState.winOptions,
     // 最小高宽设置
-    minWidth: 800,
-    minHeight: 600,
+    minWidth: 1280,
+    minHeight: 720,
     show: false,
     autoHideMenuBar: true,
     // 创建透明窗口、背景色透明、无边框 以便设置圆角效果
@@ -39,7 +37,7 @@ function createWindow() {
     titleBarOverlay: {
       color: '#2f3241',
       symbolColor: '#74b1be',
-      height: 39
+      height: 40
     },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -48,11 +46,13 @@ function createWindow() {
     }
   })
 
+  const wc = mainWindow.webContents
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
+  wc.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
@@ -64,6 +64,13 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // 窗口大小改变时重设渲染进程窗口大小
+  // mainWindow.on('will-resize', (event, newBounds, details) => {
+  //   console.log(newBounds)
+  //   console.log(details)
+  //   // wc.send('will-resize', newBounds)
+  // })
 
   // 状态管理绑定
   winState.manage(mainWindow)
