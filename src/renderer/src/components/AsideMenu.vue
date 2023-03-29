@@ -35,7 +35,7 @@ onMounted(() => {
       </el-menu-item>
       <el-menu-item index="1">
         <el-icon><Document /></el-icon>
-        <template #title>网址解析</template>
+        <template #title><router-link to="/analyzeUrl" custom>网址解析</router-link></template>
       </el-menu-item>
       <el-menu-item index="2">
         <el-icon><icon-menu /></el-icon>

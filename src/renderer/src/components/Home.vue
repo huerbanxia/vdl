@@ -23,7 +23,9 @@ const changeCollapse = (collapse) => {
       <el-header>
         <TitleBar></TitleBar>
       </el-header>
-      <el-main>内容区域</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>

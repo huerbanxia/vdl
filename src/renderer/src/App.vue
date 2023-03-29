@@ -25,11 +25,12 @@ onUnmounted(() => {
 </template>
 
 <style lang="less">
-// @import './assets/css/styles.less';
+* {
+  margin: 0;
+  padding: 0;
+}
 html body {
   height: 100%;
-  margin: 0px;
-  padding: 0px;
 }
 body {
   overflow: hidden;
