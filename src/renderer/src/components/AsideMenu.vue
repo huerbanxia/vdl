@@ -6,10 +6,11 @@
 -->
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { Document, Menu as IconMenu, Location, Expand, Fold } from '@element-plus/icons-vue'
 
+const router = useRouter()
 const isCollapse = ref(true)
-
 const emit = defineEmits(['change-collapse'])
 
 const changeCollapse = () => {
@@ -17,6 +18,9 @@ const changeCollapse = () => {
   emit('change-collapse', isCollapse.value)
 }
 onMounted(() => {
+  // 初始化访问根路径
+  router.push('/')
+  // 默认不折叠菜单
   isCollapse.value = false
 })
 </script>
@@ -33,19 +37,25 @@ onMounted(() => {
         <el-icon v-if="isCollapse"><Expand /></el-icon>
         <el-icon v-if="!isCollapse"><Fold /></el-icon>
       </el-menu-item>
-      <el-menu-item index="1">
-        <el-icon><Document /></el-icon>
-        <template #title><router-link to="/analyzeUrl" custom>网址解析</router-link></template>
-      </el-menu-item>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>网址解析</template>
-      </el-menu-item>
+      <router-link v-slot="{ navigate }" to="/analyzeUrl" custom>
+        <el-menu-item index="1" @click="navigate">
+          <el-icon><IconMenu /></el-icon>
+          <!-- 加入router-link后文字无法自动隐藏，使用if手动隐藏 -->
+          <div v-if="!isCollapse">网址解析</div>
+        </el-menu-item>
+      </router-link>
+      <router-link v-slot="{ navigate }" to="/versions" custom>
+        <el-menu-item index="2" @click="navigate">
+          <el-icon><Document /></el-icon>
+          <div v-if="!isCollapse">版本号</div>
+        </el-menu-item>
+      </router-link>
+
       <el-menu-item index="3">
         <el-icon><Location /></el-icon>
         <template #title>网址解析</template>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="4">
         <el-icon><Location /></el-icon>
         <template #title>重置窗口</template>
       </el-menu-item>

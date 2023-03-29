@@ -1,11 +1,24 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 import Home from './components/Home.vue'
+
+import useWinStore from './store/useWinStore'
+
+const options = reactive({})
+
+const winstore = useWinStore()
+
 // 重设组件大小
 const winReSize = () => {
+  // 获取窗口改变后的宽高
+  options.height = window.innerHeight
+  options.width = window.innerWidth
+  // 存储到store
+  winstore.set(options)
+  // 修改主窗口的大小
   const mainContiner = document.getElementById('main-continer')
-  mainContiner.style.height = window.innerHeight + 'px'
-  mainContiner.style.width = window.innerWidth + 'px'
+  mainContiner.style.height = options.height + 'px'
+  mainContiner.style.width = options.width + 'px'
 }
 // 组件创建添加窗口变化事件
 onMounted(() => {
@@ -19,7 +32,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="main-continer" class="main-continer">
+  <div id="main-continer" height="720px">
     <Home></Home>
   </div>
 </template>
@@ -34,8 +47,5 @@ html body {
 }
 body {
   overflow: hidden;
-}
-.main-continer {
-  height: 718px;
 }
 </style>

@@ -48,6 +48,8 @@ function createWindow() {
 
   const wc = mainWindow.webContents
 
+  // wc.openDevTools()
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

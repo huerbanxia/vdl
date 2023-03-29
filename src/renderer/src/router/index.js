@@ -17,7 +17,7 @@ const routes = [
     path: '/versions',
     name: 'versions',
     // 路由懒加载
-    component: () => import('@renderer/views/Versions.vue')
+    component: () => import('@renderer/components/views/Versions.vue')
   }
 ]
 
