@@ -21,8 +21,7 @@
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
     "electron-updater": "^5.3.0",
-    "electron-win-state": "^1.1.22",
-    "element-plus": "^2.3.1"
+    "electron-win-state": "^1.1.22"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
@@ -32,6 +31,7 @@
     "electron": "^22.3.2",
     "electron-builder": "^23.6.0",
     "electron-vite": "^1.0.20",
+    "element-plus": "^2.3.1",
     "eslint": "^8.36.0",
     "eslint-plugin-vue": "^9.9.0",
     "less": "^4.1.3",
