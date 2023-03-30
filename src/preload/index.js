@@ -8,6 +8,13 @@ const api = {
   // 设置窗口大小
   setWinSize(width, height) {
     ipcRenderer.invoke('on-set-win-size', width, height)
+  },
+  async getVideoPageList() {
+    let res = ipcRenderer.invoke('on-get-video-page-list', {})
+    return res
+  },
+  loadUrl(url) {
+    ipcRenderer.invoke('on-load-url', url)
   }
 }
 

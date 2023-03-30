@@ -44,12 +44,20 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
+      // nodeIntegrationInWorker: true
+      // 解决跨域问题
+      // webSecurity: false
     }
   })
 
   const wc = mainWindow.webContents
 
-  // wc.openDevTools()
+  wc.session.setProxy({
+    mode: 'fixed_servers',
+    proxyRules: 'http://127.0.0.1:1081'
+  })
+
+  wc.openDevTools()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

@@ -18,5 +18,9 @@ module.exports = {
   rules: {
     'vue/require-default-prop': 'off',
     'vue/multi-word-component-names': 'off'
+  },
+  globals: {
+    // 注册全局关键字 api
+    api: true
   }
 }

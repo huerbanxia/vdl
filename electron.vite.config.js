@@ -9,10 +9,27 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // externalizeDepsPlugin 自动将 main、preload 中的依赖外部化
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        input: {
+          // 单独配置文件
+          index: resolve(__dirname, 'src/main/index.js'),
+          http: resolve(__dirname, 'src/main/utils/http.js')
+        }
+      }
+    }
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        input: {
+          index: resolve(__dirname, 'src/preload/index.js'),
+          loadurl: resolve(__dirname, 'src/preload/loadurl.js')
+        }
+      }
+    }
   },
   renderer: {
     resolve: {
