@@ -4,6 +4,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import WinState from 'electron-win-state'
+import registerListtener from './listener'
 
 // 状态保存仓库
 const winState = new WinState.default({
@@ -77,6 +78,9 @@ function createWindow() {
   // 状态管理绑定
   winState.manage(mainWindow)
   // mainWindow.resetWindowToDefault()
+
+  // 注册主进程监听
+  registerListtener(mainWindow)
 }
 
 // This method will be called when Electron has finished

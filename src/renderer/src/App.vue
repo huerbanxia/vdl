@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, onUnmounted } from 'vue'
 import Home from './components/Home.vue'
-
+import _ from 'lodash-es'
 import useWinStore from './store/useWinStore'
 
 const options = reactive({})
@@ -23,11 +23,11 @@ const winReSize = () => {
 // 组件创建添加窗口变化事件
 onMounted(() => {
   winReSize()
-  window.addEventListener('resize', winReSize)
+  window.addEventListener('resize', _.debounce(winReSize, 5))
 })
 // 组件卸载移除监听
 onUnmounted(() => {
-  window.removeEventListener('resize', winReSize, false)
+  window.removeEventListener('resize', _.debounce(winReSize, 5))
 })
 </script>
 

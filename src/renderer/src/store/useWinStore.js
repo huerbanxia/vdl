@@ -12,7 +12,6 @@ const useWinStore = defineStore('winStore', {
   getters: {
     tableHeight() {
       let temp = this.winOptions.height - 150
-      console.log(temp)
       return temp
     }
   },

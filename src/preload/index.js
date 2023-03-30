@@ -1,10 +1,15 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // console.log(electronAPI)
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  // 设置窗口大小
+  setWinSize(width, height) {
+    ipcRenderer.invoke('on-set-win-size', width, height)
+  }
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

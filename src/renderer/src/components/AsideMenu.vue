@@ -23,6 +23,9 @@ onMounted(() => {
   // 默认不折叠菜单
   isCollapse.value = false
 })
+const setWinSize = () => {
+  api.setWinSize() // eslint-disable-line no-undef
+}
 </script>
 <template>
   <div class="container">
@@ -55,7 +58,7 @@ onMounted(() => {
         <el-icon><Location /></el-icon>
         <template #title>网址解析</template>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="4" @click="setWinSize">
         <el-icon><Location /></el-icon>
         <template #title>重置窗口</template>
       </el-menu-item>

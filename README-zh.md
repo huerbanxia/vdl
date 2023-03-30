@@ -15,8 +15,8 @@
 -   [x] 安装配置pinia
 -   [x] 存储全局应用宽高
 -   [x] 在组件中使用全局宽高更新布局
--   [ ] 重设窗口大小功能
--   [ ] 窗口监听函数防抖动 https://www.lodashjs.com/docs/lodash.debounce
+-   [x] 重设窗口大小功能
+-   [x] 窗口监听函数防抖动 https://www.lodashjs.com/docs/lodash.debounce
 -   [ ] 解析视频站链接
 
 ## 推荐的 IDE 设置
