@@ -16,7 +16,10 @@ export default function registerListtener(win) {
   })
 
   ipcMain.handle('on-get-video-page-list', async () => {
-    let res = await http.get('https://api.iwara.tv/videos?sort=date&rating=all')
+    // 获取 token 接口 https://api.iwara.tv/user/token
+    // let res = await http.get('https://api.iwara.tv/videos?sort=date&rating=all')
+    //
+    let res = await http.get('https://api.iwara.tv/videos?page=0&limit=24&subscribed=true')
     // 进行预览图的下载 并将完成后的路径返回
 
     // createWorker({ workerData: '1111' })

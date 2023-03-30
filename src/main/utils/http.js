@@ -28,9 +28,10 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
-    if (false) {
-      // config.headers['X-Token'] = getToken()
-      config.headers['X-Token'] = ''
+    if (true) {
+      config.headers['Authorization'] =
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDI1ODNhLTI5NGQtNDI1Ny04ZGZmLTMzMDc0MDljNjc5ZCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJyb2xlIjoidXNlciIsInByZW1pdW0iOmZhbHNlLCJpc3MiOiJpd2FyYSIsImlhdCI6MTY4MDE4NzQ4OSwiZXhwIjoxNjgwMTkxMDg5fQ.Vd1TZJxVUbqxUjVgH4md-08BHtw6FfZI-tDx_f1iNng'
+      // config.headers['X-Token'] = ''
     }
     return config
   },

@@ -10,6 +10,7 @@ import useWinStore from '../../store/useWinStore'
 // import http from '../../utils/http'
 
 const word = ref('')
+const tableRef = ref()
 
 const winStore = useWinStore()
 
@@ -22,7 +23,10 @@ const analyzeHandle = () => {
     tableData.value = res.results
   })
 }
-const download = () => {}
+const download = () => {
+  let rows = tableRef.value.getSelectionRows()
+  console.log(rows)
+}
 
 onMounted(() => {
   analyzeHandle()
@@ -38,7 +42,13 @@ onMounted(() => {
       <el-col :span="2"><el-button style="width: 100%" @click="download">下载</el-button></el-col>
     </el-row>
     <div class="data-table">
-      <el-table :data="tableData" :height="winStore.tableHeight" border stripe>
+      <el-table
+        ref="tableRef"
+        :data="tableData"
+        :height="winStore.tableHeight"
+        :border="true"
+        stripe
+      >
         <el-table-column type="selection" width="45" />
         <el-table-column type="index" width="45" />
         <el-table-column prop="" label="预览" width="100" />
@@ -48,7 +58,11 @@ onMounted(() => {
         <el-table-column prop="numViews" label="Views" width="70" />
         <el-table-column prop="updatedAt" label="更新时间" width="120" show-overflow-tooltip />
         <!-- <el-table-column prop="id" label="ID" width="50" show-overflow-tooltip /> -->
-        <el-table-column prop="address" label="下载进度" />
+        <el-table-column label="下载进度">
+          <template #default="scope">
+            <el-progress :percentage="0" />
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </el-card>
