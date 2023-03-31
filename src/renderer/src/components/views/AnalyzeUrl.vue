@@ -7,6 +7,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import useWinStore from '../../store/useWinStore'
+import { ElMessage } from 'element-plus'
 
 const winStore = useWinStore()
 const word = ref('')
@@ -54,13 +55,14 @@ const login = () => {
   api.login()
 }
 
-const deleteData = () => {}
+const deleteData = () => {
+  ElMessage.success('删除成功')
+}
 
 onMounted(() => {
   loadData()
   // 注册下载进度侦听器
   api.updateProcess((e, data) => {
-    console.log(data)
     updateTableProcess(data.id, data.process)
   })
 })
@@ -68,8 +70,11 @@ onMounted(() => {
 <template>
   <el-card class="container">
     <el-row :gutter="4">
+      <el-col :span="2"
+        ><el-button type="success" style="width: 100%" @click="login">登录</el-button></el-col
+      >
       <el-col :span="16"><el-input v-model="word" placeholder="请输入关键字" /></el-col>
-      <el-col :span="2"><el-button style="width: 100%" @click="login">登录</el-button></el-col>
+
       <el-col :span="2"><el-button style="width: 100%" @click="loadData">刷新</el-button></el-col>
       <el-col :span="2"
         ><el-button type="primary" plain style="width: 100%" @click="download"

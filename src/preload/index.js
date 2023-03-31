@@ -1,10 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
-// import { electronAPI } from '@electron-toolkit/preload'
+import { electronAPI } from '@electron-toolkit/preload'
 
 // console.log(electronAPI)
 
 // Custom APIs for renderer
 const api = {
+  // 主进程发送全局信息展示
+  showMessage(callback) {
+    ipcRenderer.on('show-msg', callback)
+  },
   // 设置窗口大小
   setWinSize(width, height) {
     ipcRenderer.invoke('on-set-win-size', width, height)
@@ -37,12 +41,12 @@ const api = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    // contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
-  // window.electron = electronAPI
+  window.electron = electronAPI
   window.api = api
 }

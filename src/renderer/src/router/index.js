@@ -11,6 +11,9 @@ const routes = [
   {
     path: '/analyzeUrl',
     name: 'analyzeUrl',
+    meta: {
+      keepAlive: true //添加这个作为标志符，表明该页面需要保留状态
+    },
     component: AnalyzeUrl
   },
   {

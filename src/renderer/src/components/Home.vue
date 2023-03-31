@@ -5,9 +5,26 @@
  * AsideMenu.vue
 -->
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AsideMenu from './AsideMenu.vue'
 import TitleBar from './TitleBar.vue'
+import { ElMessage } from 'element-plus'
+
+/**
+ * type: 'success' | 'warning' | 'info' | 'error'
+ */
+const showMessage = (type, msg) => {
+  ElMessage({
+    message: msg,
+    type: type
+  })
+}
+onMounted(() => {
+  // 注册全局消息钩子
+  api.showMessage((e, type, msg) => {
+    showMessage(type, msg)
+  })
+})
 
 const isCollapse = ref(false)
 const changeCollapse = (collapse) => {
@@ -24,7 +41,12 @@ const changeCollapse = (collapse) => {
         <TitleBar></TitleBar>
       </el-header>
       <el-main>
-        <router-view></router-view>
+        <!-- vue3.0配置 -->
+        <router-view v-slot="{ Component }">
+          <transition name="bounce">
+            <keep-alive><component :is="Component" /></keep-alive>
+          </transition>
+        </router-view>
       </el-main>
     </el-container>
   </el-container>

@@ -109,6 +109,7 @@ export default function registerListtener(win) {
 
   // event.sender.send 返回的消息必须用 on 监听
   ipcMain.on('on-return-info-list', (e, data) => {
+    e.sender.send('show-msg', 'success', '下载信息解析成功 开始下载')
     console.log('接收到下载信息 开始下载')
     let filepath = 'D:\\Download'
     if (!fs.existsSync(filepath)) {
