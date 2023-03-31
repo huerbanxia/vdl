@@ -7,39 +7,83 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import useWinStore from '../../store/useWinStore'
+import _ from 'lodash'
 // import http from '../../utils/http'
 
+const winStore = useWinStore()
 const word = ref('')
 const tableRef = ref()
-
-const winStore = useWinStore()
-
 const tableData = ref([])
 
 const analyzeHandle = () => {
   api.getVideoPageList().then((res) => {
-    console.log(res)
     // https://i.iwara.tv/image/thumbnail/id/thumbnail-00.jpg
+    res.results.forEach((item) => {
+      // 添加进度数据
+      item.process = 0
+    })
     tableData.value = res.results
   })
 }
+// 下载按钮点击事件
 const download = () => {
   let rows = tableRef.value.getSelectionRows()
-  console.log(rows)
+  let data = []
+  rows.forEach((item) => {
+    let info = {
+      id: item.id,
+      title: item.title,
+      slug: item.slug,
+      author: item.user.name,
+      fileId: item.file.id,
+      createdAt: item.createdAt.substring(0, 10).replaceAll('-', '%2F')
+    }
+    data.push(info)
+  })
+  api.downloadVideo(data)
+}
+
+const updateTableProcess = (id, process) => {
+  tableData.value.forEach((item) => {
+    if (item.id === id) {
+      item.process = process
+    }
+  })
+}
+
+const login = () => {
+  api.login()
 }
 
 onMounted(() => {
   analyzeHandle()
+
+  // 注册更新进度侦听器
+  api.updateProcess((e, data) => {
+    console.log(data)
+    updateTableProcess(data.id, data.process)
+  })
 })
 </script>
 <template>
   <el-card class="container">
     <el-row :gutter="4">
-      <el-col :span="20"><el-input v-model="word" placeholder="请输入关键字" /></el-col>
+      <el-col :span="16"><el-input v-model="word" placeholder="请输入关键字" /></el-col>
+      <el-col :span="2"><el-button style="width: 100%" @click="login">登录</el-button></el-col>
       <el-col :span="2"
         ><el-button style="width: 100%" @click="analyzeHandle">刷新</el-button></el-col
       >
-      <el-col :span="2"><el-button style="width: 100%" @click="download">下载</el-button></el-col>
+
+      <el-col :span="2"
+        ><el-button type="primary" plain style="width: 100%" @click="download"
+          >下载</el-button
+        ></el-col
+      >
+      <el-col :span="2"
+        ><el-button style="width: 100%" type="danger" plain @click="download"
+          >删除</el-button
+        ></el-col
+      >
     </el-row>
     <div class="data-table">
       <el-table
@@ -57,10 +101,9 @@ onMounted(() => {
         <el-table-column prop="numLikes" label="Likes" width="60" />
         <el-table-column prop="numViews" label="Views" width="70" />
         <el-table-column prop="updatedAt" label="更新时间" width="120" show-overflow-tooltip />
-        <!-- <el-table-column prop="id" label="ID" width="50" show-overflow-tooltip /> -->
         <el-table-column label="下载进度">
           <template #default="scope">
-            <el-progress :percentage="0" />
+            <el-progress :percentage="scope.row.process" />
           </template>
         </el-table-column>
       </el-table>

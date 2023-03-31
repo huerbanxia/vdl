@@ -15,6 +15,15 @@ const api = {
   },
   loadUrl(url) {
     ipcRenderer.invoke('on-load-url', url)
+  },
+  downloadVideo(data) {
+    ipcRenderer.invoke('on-download-video', data)
+  },
+  updateProcess(callback) {
+    ipcRenderer.on('update-process', callback)
+  },
+  login() {
+    ipcRenderer.invoke('on-login')
   }
 }
 

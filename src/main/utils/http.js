@@ -30,7 +30,7 @@ service.interceptors.request.use(
   (config) => {
     if (true) {
       config.headers['Authorization'] =
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDI1ODNhLTI5NGQtNDI1Ny04ZGZmLTMzMDc0MDljNjc5ZCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJyb2xlIjoidXNlciIsInByZW1pdW0iOmZhbHNlLCJpc3MiOiJpd2FyYSIsImlhdCI6MTY4MDE4NzQ4OSwiZXhwIjoxNjgwMTkxMDg5fQ.Vd1TZJxVUbqxUjVgH4md-08BHtw6FfZI-tDx_f1iNng'
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDI1ODNhLTI5NGQtNDI1Ny04ZGZmLTMzMDc0MDljNjc5ZCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJyb2xlIjoidXNlciIsInByZW1pdW0iOmZhbHNlLCJpc3MiOiJpd2FyYSIsImlhdCI6MTY4MDI1NjgwMiwiZXhwIjoxNjgwMjYwNDAyfQ.DPEahoBBLDjEQCdLH0TwSR_5SBjSHOSpnbez5TscZbg'
       // config.headers['X-Token'] = ''
     }
     return config
@@ -43,12 +43,23 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
+    const headers = response.headers
+    // console.log(headers['content-type'])
+    // if (headers['content-type'] === 'application/octet-stream;charset=utf-8') {
+    //   return Promise.resolve(response) //这里只返回 response,便于用户根据headers去设置文件名称
+    // }
+    // return Promise.resolve(response.data)
+
     const res = response.data
     if (response.status !== 200) {
       console.log('接口信息报错1', res.message)
       return Promise.reject(new Error(res.message || 'Error'))
-    } else {
+    } else if (headers['content-type'] === 'application/json; charset=utf-8') {
+      // 返回值为json则直接吧data返回
       return res
+    } else {
+      // 其他情况下返回返回response
+      return Promise.resolve(response)
     }
   },
   (error) => {
