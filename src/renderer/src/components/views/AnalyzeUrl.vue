@@ -12,17 +12,44 @@ import { ElMessage } from 'element-plus'
 const winStore = useWinStore()
 const word = ref('')
 const tableRef = ref()
+const tableLoading = ref(true)
 const tableData = ref([])
 
+// 日期数据 格式化 （公共函数）+ 数字补0操作
+function addZero(num) {
+  return num < 10 ? '0' + num : num
+}
+function formatDateTime(date) {
+  const time = new Date(Date.parse(date))
+  time.setTime(time.setHours(time.getHours()))
+  const Y = time.getFullYear() + '-'
+  const M = addZero(time.getMonth() + 1) + '-'
+  const D = addZero(time.getDate()) + ' '
+  const h = addZero(time.getHours()) + ':'
+  const m = addZero(time.getMinutes()) + ':'
+  const s = addZero(time.getSeconds())
+  return Y + M + D + h + m + s
+}
+
 const loadData = () => {
-  api.getVideoPageList().then((res) => {
-    // https://i.iwara.tv/image/thumbnail/id/thumbnail-00.jpg
-    res.results.forEach((item) => {
-      // 添加进度数据
-      item.process = 0
+  tableLoading.value = true
+  api
+    .getVideoPageList()
+    .then((res) => {
+      // https://i.iwara.tv/image/thumbnail/id/thumbnail-00.jpg
+      res.results.forEach((item) => {
+        // 添加进度数据
+        item.process = 0
+        item.createdAtFormat = formatDateTime(item.createdAt)
+      })
+      tableData.value = res.results
+      tableLoading.value = false
     })
-    tableData.value = res.results
-  })
+    .catch((e) => {
+      console.log(e)
+      tableLoading.value = false
+      ElMessage.error('数据加载失败')
+    })
 }
 // 下载按钮点击事件
 const download = () => {
@@ -90,6 +117,7 @@ onMounted(() => {
     <div class="data-table">
       <el-table
         ref="tableRef"
+        v-loading="tableLoading"
         :data="tableData"
         :height="winStore.tableHeight"
         :border="true"
@@ -97,12 +125,18 @@ onMounted(() => {
       >
         <el-table-column type="selection" width="45" />
         <el-table-column type="index" width="45" />
-        <el-table-column prop="" label="预览" width="100" />
+        <!-- <el-table-column prop="" label="预览" width="100" /> -->
         <el-table-column prop="title" label="标题" width="180" show-overflow-tooltip />
-        <el-table-column prop="user.name" label="作者" width="180" show-overflow-tooltip />
-        <el-table-column prop="numLikes" label="Likes" width="60" />
-        <el-table-column prop="numViews" label="Views" width="70" />
-        <el-table-column prop="updatedAt" label="更新时间" width="120" show-overflow-tooltip />
+        <el-table-column prop="user.name" label="作者" width="100" show-overflow-tooltip />
+        <el-table-column prop="numLikes" sortable label="Likes" width="90" />
+        <!-- <el-table-column prop="numViews" label="Views" width="70" /> -->
+        <el-table-column
+          prop="createdAtFormat"
+          label="创建时间"
+          width="165"
+          sortable
+          show-overflow-tooltip
+        />
         <el-table-column label="下载进度">
           <template #default="scope">
             <el-progress :percentage="scope.row.process" />

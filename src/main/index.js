@@ -57,8 +57,11 @@ function createWindow() {
     proxyRules: 'http://127.0.0.1:1081'
   })
 
-  wc.openDevTools()
+  if (is.dev) {
+    wc.openDevTools()
+  }
 
+  // 优雅地显示窗口
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })

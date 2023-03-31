@@ -53,7 +53,6 @@ export default function registerListtener(win) {
 
   ipcMain.handle('on-download-video', (e, data) => {
     data.forEach((item) => {
-      console.log(11)
       // https://www.iwara.tv/video/jUYUofGNEFJTgr/darling-dance-or-ninomae-inanis-pov
       let url = 'https://www.iwara.tv/video/' + item.id + '/' + item.slug
       const win = new BrowserWindow({
@@ -81,6 +80,10 @@ export default function registerListtener(win) {
       win.webContents.on('did-finish-load', () => {
         setTimeout(() => {
           win.webContents.send('on-did-finish-load', item.id)
+          // 延时一秒关闭窗口
+          setTimeout(() => {
+            win.close()
+          }, 1000)
         }, 6000)
       })
 
