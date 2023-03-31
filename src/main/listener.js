@@ -5,8 +5,9 @@ import fs from 'fs'
 import _ from 'lodash'
 // import createWorker from './utils/worker?nodeWorker'
 
+// 主进程监听器统一注册
 export default function registerListtener(win) {
-  const wc = win.webContents // eslint-disable-line no-unused-vars
+  const wc = win.webContents
 
   ipcMain.handle('on-set-win-size', (width, height) => {
     if (width && height) {
@@ -36,7 +37,6 @@ export default function registerListtener(win) {
   ipcMain.handle('on-get-video-page-list', async () => {
     // 获取 token 接口 https://api.iwara.tv/user/token
     // let res = await http.get('https://api.iwara.tv/videos?sort=date&rating=all')
-    //
     let res = await http.get('https://api.iwara.tv/videos?page=0&limit=24&subscribed=true')
     // 进行预览图的下载 并将完成后的路径返回
 
@@ -53,11 +53,12 @@ export default function registerListtener(win) {
 
   ipcMain.handle('on-download-video', (e, data) => {
     data.forEach((item) => {
+      console.log(11)
       // https://www.iwara.tv/video/jUYUofGNEFJTgr/darling-dance-or-ninomae-inanis-pov
       let url = 'https://www.iwara.tv/video/' + item.id + '/' + item.slug
       const win = new BrowserWindow({
-        width: 100,
-        height: 100,
+        width: 1280,
+        height: 720,
         show: false,
         webPreferences: {
           preload: join(__dirname, '../preload/loadurl.js'),
@@ -67,22 +68,25 @@ export default function registerListtener(win) {
         }
       })
       win.webContents.openDevTools()
-
       win.webContents.session.setProxy({
         mode: 'fixed_servers',
         proxyRules: 'http://127.0.0.1:1081'
       })
-
+      /**
+       * 等待页面基本元素加载完成后
+       * 延时等待所有元素加载完成后再进行下载链接的读取
+       * 否则读取不到数据
+       * 这个可能是i站为放爬取设置了固定的延时
+       */
       win.webContents.on('did-finish-load', () => {
-        // page-videoList__item
         setTimeout(() => {
           win.webContents.send('on-did-finish-load', item.id)
-        }, 4000)
+        }, 6000)
       })
 
       win.loadURL(url)
 
-      // 当前页面加载完成
+      // 手动拼接下载链接 暂时未成功
       // http.get('https://api.iwara.tv/video/' + item.id).then((res) => {
       //   console.log(res.fileUrl)
       //   let downloadUrl =
@@ -103,13 +107,16 @@ export default function registerListtener(win) {
     })
   })
 
+  // event.sender.send 返回的消息必须用 on 监听
   ipcMain.on('on-return-info-list', (e, data) => {
+    console.log('接收到下载信息 开始下载')
     let filepath = 'D:\\Download'
     if (!fs.existsSync(filepath)) {
       fs.mkdirSync(filepath)
     }
     if (data.list?.length !== 0) {
       let video = _.find(data.list, { type: 'Source' })
+      console.log(video.downloadUrl)
       http
         .get(video.downloadUrl, {
           responseType: 'stream',
@@ -128,6 +135,7 @@ export default function registerListtener(win) {
         })
     } else {
       console.error('未获取到下载数据')
+      //TODO 向前端发送消息 获取下载进度失败
     }
   })
 

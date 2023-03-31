@@ -38,7 +38,7 @@ function createWindow() {
     titleBarOverlay: {
       color: '#2f3241',
       symbolColor: '#74b1be',
-      height: 40
+      height: 30
     },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -75,13 +75,6 @@ function createWindow() {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  // 窗口大小改变时重设渲染进程窗口大小
-  // mainWindow.on('will-resize', (event, newBounds, details) => {
-  //   console.log(newBounds)
-  //   console.log(details)
-  //   // wc.send('will-resize', newBounds)
-  // })
 
   // 状态管理绑定
   winState.manage(mainWindow)

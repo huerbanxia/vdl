@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+// import { electronAPI } from '@electron-toolkit/preload'
 
 // console.log(electronAPI)
 
@@ -9,19 +9,24 @@ const api = {
   setWinSize(width, height) {
     ipcRenderer.invoke('on-set-win-size', width, height)
   },
+  // 获取视频列表
   async getVideoPageList() {
     let res = ipcRenderer.invoke('on-get-video-page-list', {})
     return res
   },
+  // 加载url
   loadUrl(url) {
     ipcRenderer.invoke('on-load-url', url)
   },
+  // 下载视频
   downloadVideo(data) {
     ipcRenderer.invoke('on-download-video', data)
   },
+  // 更新下载进度条
   updateProcess(callback) {
     ipcRenderer.on('update-process', callback)
   },
+  // 手动登录
   login() {
     ipcRenderer.invoke('on-login')
   }
@@ -32,12 +37,12 @@ const api = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
+    // contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
-  window.electron = electronAPI
+  // window.electron = electronAPI
   window.api = api
 }

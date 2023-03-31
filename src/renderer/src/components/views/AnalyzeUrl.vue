@@ -1,5 +1,5 @@
 <!--
- * 网站分析组件
+ * 我的订阅页面下载组件
  * @author: zgy
  * @since: 2023-03-29
  * AnalyzeUrl.vue
@@ -7,15 +7,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import useWinStore from '../../store/useWinStore'
-import _ from 'lodash'
-// import http from '../../utils/http'
 
 const winStore = useWinStore()
 const word = ref('')
 const tableRef = ref()
 const tableData = ref([])
 
-const analyzeHandle = () => {
+const loadData = () => {
   api.getVideoPageList().then((res) => {
     // https://i.iwara.tv/image/thumbnail/id/thumbnail-00.jpg
     res.results.forEach((item) => {
@@ -51,14 +49,16 @@ const updateTableProcess = (id, process) => {
   })
 }
 
+// 手动登录按钮
 const login = () => {
   api.login()
 }
 
-onMounted(() => {
-  analyzeHandle()
+const deleteData = () => {}
 
-  // 注册更新进度侦听器
+onMounted(() => {
+  loadData()
+  // 注册下载进度侦听器
   api.updateProcess((e, data) => {
     console.log(data)
     updateTableProcess(data.id, data.process)
@@ -70,17 +70,14 @@ onMounted(() => {
     <el-row :gutter="4">
       <el-col :span="16"><el-input v-model="word" placeholder="请输入关键字" /></el-col>
       <el-col :span="2"><el-button style="width: 100%" @click="login">登录</el-button></el-col>
-      <el-col :span="2"
-        ><el-button style="width: 100%" @click="analyzeHandle">刷新</el-button></el-col
-      >
-
+      <el-col :span="2"><el-button style="width: 100%" @click="loadData">刷新</el-button></el-col>
       <el-col :span="2"
         ><el-button type="primary" plain style="width: 100%" @click="download"
           >下载</el-button
         ></el-col
       >
       <el-col :span="2"
-        ><el-button style="width: 100%" type="danger" plain @click="download"
+        ><el-button style="width: 100%" type="danger" plain @click="deleteData"
           >删除</el-button
         ></el-col
       >
@@ -117,7 +114,6 @@ onMounted(() => {
   height: 100%;
 }
 .data-table {
-  // height: 80%;
   margin-top: 15px;
 }
 </style>

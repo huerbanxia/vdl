@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 ipcRenderer.on('on-did-finish-load', (event, id) => {
+  console.log('开始解析下载链接')
   const downloadDom = document.querySelectorAll('.dropdown__content')[2]
   console.log(downloadDom)
   let liList = downloadDom.childNodes[0].childNodes
@@ -14,6 +15,7 @@ ipcRenderer.on('on-did-finish-load', (event, id) => {
     }
     data.list.push(info)
   })
+  console.log('解析到数据 ' + data.list.length + ' 条')
   event.sender.send('on-return-info-list', data)
   // const mutationObserver = new MutationObserver((mutations) => {
   //   mutations.forEach((mutation) => {
