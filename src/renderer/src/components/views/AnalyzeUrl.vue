@@ -83,6 +83,7 @@ const login = () => {
 }
 
 const deleteData = () => {
+  api.testPool()
   ElMessage.success('删除成功')
 }
 

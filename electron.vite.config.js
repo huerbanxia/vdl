@@ -10,23 +10,24 @@ import ElementPlus from 'unplugin-element-plus/vite'
 // externalizeDepsPlugin 自动将 main、preload 中的依赖外部化
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
-    build: {
-      rollupOptions: {
-        input: {
-          // 单独配置文件
-          index: resolve(__dirname, 'src/main/index.js'),
-          http: resolve(__dirname, 'src/main/utils/http.js')
-        }
-      }
-    }
+    plugins: [externalizeDepsPlugin()]
+    // build: {
+    //   rollupOptions: {
+    //     input: {
+    //       // 单独配置文件
+    //       index: resolve(__dirname, 'src/main/index.js')
+    //     }
+    //   }
+    // }
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
         input: {
+          // 主进程预加载脚本
           index: resolve(__dirname, 'src/preload/index.js'),
+          // 解析下载预加载脚本
           loadurl: resolve(__dirname, 'src/preload/loadurl.js')
         }
       }

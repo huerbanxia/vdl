@@ -33,6 +33,9 @@ const api = {
   // 手动登录
   login() {
     ipcRenderer.invoke('on-login')
+  },
+  testPool() {
+    ipcRenderer.invoke('on-test-pool')
   }
 }
 

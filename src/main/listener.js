@@ -4,6 +4,8 @@ import http from './utils/http'
 import fs from 'fs'
 import _ from 'lodash'
 // import createWorker from './utils/worker?nodeWorker'
+import WorkerPool from './utils/worker_pool'
+import os from 'os'
 
 // 主进程监听器统一注册
 export default function registerListtener(win) {
@@ -140,6 +142,18 @@ export default function registerListtener(win) {
     } else {
       console.error('未获取到下载数据')
       //TODO 向前端发送消息 获取下载进度失败
+    }
+  })
+
+  ipcMain.handle('on-test-pool', (e, data) => {
+    const pool = new WorkerPool(os.cpus().length)
+    console.log(`cpus length:`, os.cpus().length)
+    let finished = 0
+    for (let i = 0; i < 16; i++) {
+      pool.runTask({ a: 100, b: i }, (err, result) => {
+        console.log(i, err, result)
+        if (++finished === 10) pool.close()
+      })
     }
   })
 
