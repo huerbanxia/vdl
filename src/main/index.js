@@ -6,6 +6,8 @@ import icon from '../../resources/icon.png?asset'
 import WinState from 'electron-win-state'
 import registerListtener from './listener'
 
+console.log(import.meta.env.MAIN_VITE_TEST)
+
 // 状态保存仓库
 const winState = new WinState.default({
   defaultWidth: 1280,

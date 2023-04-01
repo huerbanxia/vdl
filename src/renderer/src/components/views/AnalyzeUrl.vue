@@ -48,7 +48,7 @@ const loadData = () => {
     .catch((e) => {
       console.log(e)
       tableLoading.value = false
-      ElMessage.error('数据加载失败')
+      ElMessage.error('数据加载失败 请检查网络连接')
     })
 }
 // 下载按钮点击事件
