@@ -1,4 +1,5 @@
 import axios from 'axios'
+import globalConfig from './config'
 // import useAuthStore from '@renderer/store/useAuthStore'
 // import { getToken } from '../../renderer/src/utils/auth'
 
@@ -6,32 +7,31 @@ import axios from 'axios'
 
 // console.log(authStore)
 
-const service = axios.create({
+const options = {
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  timeout: 5000, // request timeout
-  proxy: {
-    protocol: 'http',
-    host: '127.0.0.1',
-    port: 1081
-    //   changeOrigin: true
-    //   // auth: {
-    //   //   username: 'mikeymike',
-    //   //   password: 'rapunz3l'
-    //   // }
-  }
+  timeout: 5000 // request timeout
   // headers: {
   //   accept:
   //     'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
   //   acceptEncoding: 'gzip, deflate, br'
   // }
-})
+}
+
+if (globalConfig.config.proxy) {
+  let proxy = globalConfig.config.proxy
+  options.proxy = {
+    protocol: proxy.protocol,
+    host: proxy.host,
+    port: proxy.port
+  }
+}
+
+const service = axios.create(options)
 
 service.interceptors.request.use(
   (config) => {
-    if (true) {
-      config.headers['Authorization'] =
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDI1ODNhLTI5NGQtNDI1Ny04ZGZmLTMzMDc0MDljNjc5ZCIsInR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJyb2xlIjoidXNlciIsInByZW1pdW0iOmZhbHNlLCJpc3MiOiJpd2FyYSIsImlhdCI6MTY4MDI2NzA4NCwiZXhwIjoxNjgwMjcwNjg0fQ.olOaz08R_R3_GALf0y5UpHU3YC4MY53fqZtSuTXnGGc'
-      // config.headers['X-Token'] = ''
+    if (globalConfig.config.authorization) {
+      config.headers['Authorization'] = 'Bearer ' + globalConfig.config.authorization
     }
     return config
   },
@@ -44,12 +44,6 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const headers = response.headers
-    // console.log(headers['content-type'])
-    // if (headers['content-type'] === 'application/octet-stream;charset=utf-8') {
-    //   return Promise.resolve(response) //这里只返回 response,便于用户根据headers去设置文件名称
-    // }
-    // return Promise.resolve(response.data)
-
     const res = response.data
     if (response.status !== 200) {
       console.log('接口信息报错1', res.message)

@@ -2,6 +2,9 @@ appId: com.electron.app
 productName: vdl
 directories:
   buildResources: build
+extraResources:
+  from: ./settings.yml
+  to: ../
 files:
   - '!**/.vscode/*'
   - '!src/*'

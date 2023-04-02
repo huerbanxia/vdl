@@ -3,9 +3,9 @@ import { join, resolve } from 'path'
 import http from './utils/http'
 import fs from 'fs'
 import _ from 'lodash'
-// import createWorker from './utils/worker?nodeWorker'
 import WorkerPool from './utils/worker_pool'
 import os from 'os'
+import globalConfig from './utils/config'
 
 // 主进程监听器统一注册
 export default function registerListtener(win) {
@@ -68,11 +68,17 @@ export default function registerListtener(win) {
           session: session.fromPartition('persist:session-iwara') //共享session
         }
       })
-      win.webContents.openDevTools()
-      win.webContents.session.setProxy({
-        mode: 'fixed_servers',
-        proxyRules: 'http://127.0.0.1:1081'
-      })
+
+      // win.webContents.openDevTools()
+
+      // 判断是否需要代理
+      if (globalConfig.config.proxy) {
+        let proxy = globalConfig.config.proxy
+        win.webContents.session.setProxy({
+          mode: 'fixed_servers',
+          proxyRules: proxy.protocol + '://' + proxy.host + proxy.port
+        })
+      }
       /**
        * 等待页面基本元素加载完成后
        * 延时等待所有元素加载完成后再进行下载链接的读取

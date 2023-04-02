@@ -5,8 +5,11 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import WinState from 'electron-win-state'
 import registerListtener from './listener'
+import globalConfig from './utils/config'
 
-console.log(import.meta.env.MAIN_VITE_TEST)
+// 测试环境变量
+console.log('主进程环境变量', import.meta.env)
+console.log('主进程配置文件', globalConfig)
 
 // 状态保存仓库
 const winState = new WinState.default({
@@ -53,11 +56,6 @@ function createWindow() {
   })
 
   const wc = mainWindow.webContents
-
-  wc.session.setProxy({
-    mode: 'fixed_servers',
-    proxyRules: 'http://127.0.0.1:1081'
-  })
 
   if (is.dev) {
     wc.openDevTools()
