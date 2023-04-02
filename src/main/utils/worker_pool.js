@@ -40,11 +40,16 @@ class WorkerPool extends EventEmitter {
   addNewWorker() {
     const worker = new createWorker(resolve(__dirname, 'task_processor.js'))
     worker.on('message', (result) => {
+      // 获取到信息后调用回返回信息
+      worker[kTaskInfo].callback(null, result)
       // 如果成功：调用传递给`runTask`的回调，删除与Worker关联的`TaskInfo`，并再次将其标记为空闲。
-      worker[kTaskInfo].done(null, result)
-      worker[kTaskInfo] = null
-      this.freeWorkers.push(worker)
-      this.emit(kWorkerFreedEvent)
+      if (result === 100 && worker[kTaskInfo]) {
+        // 此处判断下载完成且worker[kTaskInfo]存在才进行下面的操作
+        worker[kTaskInfo].done(null, result)
+        worker[kTaskInfo] = null
+        this.freeWorkers.push(worker)
+        this.emit(kWorkerFreedEvent)
+      }
     })
     worker.on('error', (err) => {
       // 如果发生未捕获的异常：调用传递给 `runTask` 并出现错误的回调。

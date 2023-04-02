@@ -1,15 +1,15 @@
 import { ipcRenderer } from 'electron'
 
-ipcRenderer.on('on-did-finish-load', (event, id) => {
+ipcRenderer.on('on-did-finish-load', (event, videoData) => {
   console.log('开始解析下载链接')
   const downloadDom = document.querySelectorAll('.dropdown__content')[2]
   console.log(downloadDom)
   let liList = downloadDom.childNodes[0].childNodes
-  const data = { id: id, list: [] }
+  const data = { ...videoData, list: [] }
   liList.forEach((item) => {
     let aDom = item.firstChild
     let info = {
-      id: id,
+      id: videoData.id,
       downloadUrl: aDom.href,
       type: aDom.innerText
     }

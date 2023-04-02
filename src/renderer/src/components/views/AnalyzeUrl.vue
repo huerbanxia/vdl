@@ -40,6 +40,8 @@ const loadData = () => {
       res.results.forEach((item) => {
         // 添加进度数据
         item.process = 0
+        // 添加进度状态数据
+        item.status = true
         item.createdAtFormat = formatDateTime(item.createdAt)
       })
       tableData.value = res.results
@@ -69,12 +71,23 @@ const download = () => {
   api.downloadVideo(data)
 }
 
-const updateTableProcess = (id, process) => {
+const updateTableProcess = (id, process, status) => {
   tableData.value.forEach((item) => {
     if (item.id === id) {
       item.process = process
+      item.status = status
     }
   })
+}
+
+const getColor = (row) => {
+  if (row.status) {
+    if (row.process === 100) {
+      return '#5cb87a'
+    }
+    return '#1989fa'
+  }
+  return '#E06202'
 }
 
 // 手动登录按钮
@@ -91,7 +104,7 @@ onMounted(() => {
   loadData()
   // 注册下载进度侦听器
   api.updateProcess((e, data) => {
-    updateTableProcess(data.id, data.process)
+    updateTableProcess(data.id, data.process, data.status)
   })
 })
 </script>
@@ -140,7 +153,7 @@ onMounted(() => {
         />
         <el-table-column label="下载进度">
           <template #default="scope">
-            <el-progress :percentage="scope.row.process" />
+            <el-progress :percentage="scope.row.process" :color="getColor(scope.row)" />
           </template>
         </el-table-column>
       </el-table>

@@ -1,7 +1,10 @@
 # 代理设置
 proxy:
+  # 协议
   protocol: http
+  # 主机
   host: 127.0.0.1
+  # 端口号
   port: 1081
 
 # 认证信息
@@ -9,3 +12,6 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNDI1ODNhLTI5NGQt
 
 # 请求超时时间（单位毫秒 1秒=1000毫秒） 默认值 5000
 timeout: 5000
+maxTaskNum: 2
+# 下载路径
+savePath: D:\Download\test

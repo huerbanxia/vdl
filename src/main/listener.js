@@ -4,8 +4,10 @@ import http from './utils/http'
 import fs from 'fs'
 import _ from 'lodash'
 import WorkerPool from './utils/worker_pool'
-import os from 'os'
 import globalConfig from './utils/config'
+
+const poolSize = globalConfig.config.maxTaskNum ? globalConfig.config.maxTaskNum : 1
+const pool = new WorkerPool(poolSize)
 
 // 主进程监听器统一注册
 export default function registerListtener(win) {
@@ -74,9 +76,10 @@ export default function registerListtener(win) {
       // 判断是否需要代理
       if (globalConfig.config.proxy) {
         let proxy = globalConfig.config.proxy
+        let proxyUrl = proxy.protocol + '://' + proxy.host + ':' + proxy.port
         win.webContents.session.setProxy({
           mode: 'fixed_servers',
-          proxyRules: proxy.protocol + '://' + proxy.host + proxy.port
+          proxyRules: proxyUrl
         })
       }
       /**
@@ -87,7 +90,7 @@ export default function registerListtener(win) {
        */
       win.webContents.on('did-finish-load', () => {
         setTimeout(() => {
-          win.webContents.send('on-did-finish-load', item.id)
+          win.webContents.send('on-did-finish-load', item)
           // 延时一秒关闭窗口
           setTimeout(() => {
             win.close()
@@ -122,46 +125,22 @@ export default function registerListtener(win) {
   ipcMain.on('on-return-info-list', (e, data) => {
     e.sender.send('show-msg', 'success', '下载信息解析成功 开始下载')
     console.log('接收到下载信息 开始下载')
-    let filepath = 'D:\\Download'
-    if (!fs.existsSync(filepath)) {
-      fs.mkdirSync(filepath)
-    }
-    if (data.list?.length !== 0) {
-      let video = _.find(data.list, { type: 'Source' })
-      console.log(video.downloadUrl)
-      http
-        .get(video.downloadUrl, {
-          responseType: 'stream',
-          onDownloadProgress: (progressEvent) => {
-            let process = Math.round((progressEvent.loaded / progressEvent.total) * 100)
-            wc.send('update-process', { id: data.id, process: process })
-          }
-        })
-        .then((res) => {
-          const mypath = resolve(filepath, '1.mp4')
-          const writer = fs.createWriteStream(mypath)
-          res.data.pipe(writer)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-    } else {
-      console.error('未获取到下载数据')
-      //TODO 向前端发送消息 获取下载进度失败
-    }
+    pool.runTask({ data }, (err, result) => {
+      let res = {
+        id: data.id,
+        process: result.process,
+        status: result.status
+      }
+      if (result.status) {
+        wc.send('update-process', res)
+      } else {
+        wc.send('update-process', res)
+        e.sender.send('show-msg', 'error', '下载失败')
+      }
+    })
   })
 
-  ipcMain.handle('on-test-pool', (e, data) => {
-    const pool = new WorkerPool(os.cpus().length)
-    console.log(`cpus length:`, os.cpus().length)
-    let finished = 0
-    for (let i = 0; i < 16; i++) {
-      pool.runTask({ a: 100, b: i }, (err, result) => {
-        console.log(i, err, result)
-        if (++finished === 10) pool.close()
-      })
-    }
-  })
+  ipcMain.handle('on-test-pool', (e, data) => {})
 
   // 加载url
   // ipcMain.handle('on-load-url', (e, url) => {
