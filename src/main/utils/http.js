@@ -9,12 +9,7 @@ import globalConfig from './config'
 
 const options = {
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  timeout: 5000 // request timeout
-  // headers: {
-  //   accept:
-  //     'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-  //   acceptEncoding: 'gzip, deflate, br'
-  // }
+  timeout: globalConfig?.timeout ?? 5000 // request timeout
 }
 
 if (globalConfig.config.proxy) {
