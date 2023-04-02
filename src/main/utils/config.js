@@ -5,7 +5,15 @@ import yaml from 'js-yaml'
 
 class GlobalConfig {
   constructor() {
-    this.configPath = resolve(__dirname, '../../' + import.meta.env.MAIN_VITE_CONFIG_NAME)
+    this.configPath = null
+    // 根据运行环境选择不同的配置文件路径
+    if (import.meta.env.DEV) {
+      this.configPath = resolve(__dirname, '../../' + import.meta.env.MAIN_VITE_CONFIG_NAME)
+    } else {
+      this.configPath = resolve(process.cwd(), import.meta.env.MAIN_VITE_CONFIG_NAME)
+    }
+
+    // this.configPath = 'D:/' + import.meta.env.MAIN_VITE_CONFIG_NAME
     this.config = {}
   }
 

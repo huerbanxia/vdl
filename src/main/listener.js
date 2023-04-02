@@ -1,8 +1,6 @@
 import { ipcMain, BrowserWindow, session } from 'electron'
-import { join, resolve } from 'path'
+import { join } from 'path'
 import http from './utils/http'
-import fs from 'fs'
-import _ from 'lodash'
 import WorkerPool from './utils/worker_pool'
 import globalConfig from './utils/config'
 
@@ -124,7 +122,7 @@ export default function registerListtener(win) {
   // event.sender.send 返回的消息必须用 on 监听
   ipcMain.on('on-return-info-list', (e, data) => {
     e.sender.send('show-msg', 'success', '下载信息解析成功 开始下载')
-    console.log('接收到下载信息 开始下载')
+    console.log('接收到下载信息 开始下载', data.list.length)
     pool.runTask({ data }, (err, result) => {
       let res = {
         id: data.id,
@@ -140,7 +138,9 @@ export default function registerListtener(win) {
     })
   })
 
-  ipcMain.handle('on-test-pool', (e, data) => {})
+  ipcMain.handle('on-test-pool', (e, data) => {
+    console.log(data)
+  })
 
   // 加载url
   // ipcMain.handle('on-load-url', (e, url) => {

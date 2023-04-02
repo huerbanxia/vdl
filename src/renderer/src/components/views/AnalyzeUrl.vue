@@ -97,6 +97,7 @@ const login = () => {
 
 const deleteData = () => {
   api.testPool()
+  console.log(132)
   ElMessage.success('删除成功')
 }
 
@@ -143,7 +144,6 @@ onMounted(() => {
         <el-table-column prop="title" label="标题" width="180" show-overflow-tooltip />
         <el-table-column prop="user.name" label="作者" width="100" show-overflow-tooltip />
         <el-table-column prop="numLikes" sortable label="Likes" width="90" />
-        <!-- <el-table-column prop="numViews" label="Views" width="70" /> -->
         <el-table-column
           prop="createdAtFormat"
           label="创建时间"
@@ -153,7 +153,12 @@ onMounted(() => {
         />
         <el-table-column label="下载进度">
           <template #default="scope">
-            <el-progress :percentage="scope.row.process" :color="getColor(scope.row)" />
+            <el-progress
+              :percentage="scope.row.process"
+              :stroke-width="20"
+              :text-inside="false"
+              :color="getColor(scope.row)"
+            />
           </template>
         </el-table-column>
       </el-table>

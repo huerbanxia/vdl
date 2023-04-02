@@ -43,10 +43,12 @@ class WorkerPool extends EventEmitter {
       // 获取到信息后调用回返回信息
       worker[kTaskInfo].callback(null, result)
       // 如果成功：调用传递给`runTask`的回调，删除与Worker关联的`TaskInfo`，并再次将其标记为空闲。
-      if (result === 100 && worker[kTaskInfo]) {
-        // 此处判断下载完成且worker[kTaskInfo]存在才进行下面的操作
-        worker[kTaskInfo].done(null, result)
-        worker[kTaskInfo] = null
+      if (result.process === 100) {
+        if (worker[kTaskInfo]) {
+          // 此处判断下载完成且worker[kTaskInfo]存在才进行下面的操作
+          worker[kTaskInfo].done(null, result)
+          worker[kTaskInfo] = null
+        }
         this.freeWorkers.push(worker)
         this.emit(kWorkerFreedEvent)
       }

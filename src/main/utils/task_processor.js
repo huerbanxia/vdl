@@ -22,7 +22,6 @@ parentPort.on('message', (task) => {
         }
       }
     }
-    console.log(video.downloadUrl)
     http
       .get(video.downloadUrl, {
         responseType: 'stream',
@@ -37,7 +36,6 @@ parentPort.on('message', (task) => {
         }
       })
       .then((res) => {
-        console.log(data)
         const filename =
           data.author + ' - ' + data.title + ' [' + video.type + '] [' + data.id + '].mp4'
         const mypath = resolve(filepath, filename)
