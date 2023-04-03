@@ -14,8 +14,8 @@ const api = {
     ipcRenderer.invoke('on-set-win-size', width, height)
   },
   // 获取视频列表
-  async getVideoPageList() {
-    let res = ipcRenderer.invoke('on-get-video-page-list', {})
+  async getVideoPageList(params) {
+    let res = ipcRenderer.invoke('on-get-video-page-list', params)
     return res
   },
   // 加载url

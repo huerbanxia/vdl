@@ -36,20 +36,19 @@ export default function registerListtener(win) {
     win.loadURL('https://www.iwara.tv/login')
   })
 
-  ipcMain.handle('on-get-video-page-list', async () => {
+  ipcMain.handle('on-get-video-page-list', async (e, data) => {
     // 获取 token 接口 https://api.iwara.tv/user/token
     // let res = await http.get('https://api.iwara.tv/videos?sort=date&rating=all')
-    let res = await http.get('https://api.iwara.tv/videos?page=0&limit=24&subscribed=true')
-    // 进行预览图的下载 并将完成后的路径返回
+    // https://api.iwara.tv/search?type=video&query=hello&page=0
 
-    // createWorker({ workerData: '1111' })
-    //   .on('message', (message) => {
-    //     console.log(`Message from worker: ${message}`)
-    //   })
-    //   .postMessage('123')
-    // for (let item of res.results) {
-    // }
-
+    let params = {}
+    if (data.isSubscribed === '1') {
+      params.subscribed = true
+    } else {
+      params.sort = data.sort
+    }
+    console.log(params)
+    let res = await http.get('https://api.iwara.tv/videos?page=0&limit=24', { params })
     return res
   })
 
