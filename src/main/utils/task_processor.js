@@ -52,6 +52,11 @@ parentPort.on('message', (task) => {
       })
   } else {
     console.error('未获取到下载数据')
-    //TODO 向前端发送消息 获取下载进度失败
+    // 向前端发送消息 获取下载进度失败
+    let result = {
+      status: false,
+      process
+    }
+    parentPort.postMessage(result)
   }
 })
